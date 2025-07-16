@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.env
+
+# Django
+db.sqlite3
+*.log
+media/
+staticfiles/
+.env*
+
+# VS Code
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Docker
+*.pid
+*.sock
+volumes/
+*.db
+
+# Migrations
+**/migrations/*
+!**/migrations/__init__.py
+
+# Node (si un jour tu ajoutes React)
+node_modules/
+build/
+dist/
+
+# Environment
+.env
+.env.local
