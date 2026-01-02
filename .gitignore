@@ -4,6 +4,8 @@ __pycache__/
 *.pyo
 *.pyd
 *.env
+*env/
+*venv/
 
 # Django
 db.sqlite3
@@ -28,6 +30,9 @@ volumes/
 **/migrations/*
 !**/migrations/__init__.py
 
+# Channels / Redis
+redis-data/
+
 # Node (si un jour tu ajoutes React)
 node_modules/
 build/
@@ -36,3 +41,9 @@ dist/
 # Environment
 .env
 .env.local
+
+#autre
+env.example
+firebase_credentials.json
+start.sh
+wait_for_db.py

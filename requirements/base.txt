@@ -1,7 +1,20 @@
-Django>=4.2
+Django>=5.0,<6.0
 djangorestframework
 djangorestframework-simplejwt
 psycopg2-binary
 python-decouple
 django-cors-headers
 drf-yasg
+Pillow
+firebase-admin==6.5.0
+django-leaflet
+
+# gdal>=3.6,<3.7 Packages géospatiales alternatives (plus stables)
+pyproj
+Shapely
+geojson
+
+channels==4.0.0
+daphne
+channels-redis
+
