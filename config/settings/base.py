@@ -7,11 +7,16 @@ from decouple import config
 import firebase_admin
 from firebase_admin import credentials, messaging
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# ------------------------------------------------------------
+# Paths
+# ------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
+# ------------------------------------------------------------
+# Secrets et Debug
+# ------------------------------------------------------------
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-change-me-in-production')
+DEBUG = config('DEBUG', default=True, cast=bool)
 
 
 FIREBASE_CREDENTIALS = os.path.join(BASE_DIR, "firebase_credentials.json")
@@ -20,7 +25,9 @@ if not firebase_admin._apps:
     cred = credentials.Certificate(FIREBASE_CREDENTIALS)
     firebase_admin.initialize_app(cred)
 
-# Configuration des notifications
+# ------------------------------------------------------------
+# Notifications
+# ------------------------------------------------------------
 NOTIFICATION_SETTINGS = {
     'FCM_ENABLED': True,
     'WEBSOCKET_ENABLED': True,
@@ -28,10 +35,11 @@ NOTIFICATION_SETTINGS = {
     'NOTIFICATION_PRIORITY': 'high',
 }
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=True, cast=bool)
 
-# Application definition
+
+# ------------------------------------------------------------
+# Applications Django
+# ------------------------------------------------------------
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -59,16 +67,23 @@ LOCAL_APPS = [
     'apps.orders',
     'apps.notifications'
 ]
-ASGI_APPLICATION = "config.asgi.application"
+
 INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + LOCAL_APPS
 
-# channels
+ASGI_APPLICATION = "config.asgi.application"
+
+# ------------------------------------------------------------
+# Channels / Redis
+# ------------------------------------------------------------
+
+
+REDIS_URL = config('REDIS_URL', default='redis://localhost:6379/1')
+
+#Channel
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [('redis', 6379)],
-        },
+        "CONFIG": {"hosts": [REDIS_URL]},
     },
 }
 
@@ -76,13 +91,16 @@ CHANNEL_LAYERS = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://redis:6379/1",
+        "LOCATION": REDIS_URL, #"redis://redis:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     }
 }
 
+# ------------------------------------------------------------
+# Middleware
+# ------------------------------------------------------------
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -114,7 +132,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+# ------------------------------------------------------------
 # Password validation
+# ------------------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -130,7 +150,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# ------------------------------------------------------------
 # Internationalization
+# ------------------------------------------------------------
 LANGUAGE_CODE = 'fr-fr'
 TIME_ZONE = 'Africa/Abidjan'
 USE_I18N = True
@@ -144,13 +166,20 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 #os.makedirs(os.path.join(MEDIA_ROOT, 'prescriptions'), exist_ok=True)
 #os.makedirs(os.path.join(MEDIA_ROOT, 'pharmacies/logos/'), exist_ok=True)
-# Default primary key field type
+
+# ------------------------------------------------------------
+# Default primary key
+# ------------------------------------------------------------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# ------------------------------------------------------------
 # Custom User Model
+# ------------------------------------------------------------
 AUTH_USER_MODEL = 'users.CustomUser'
 
+# ------------------------------------------------------------
 # Django REST Framework
+# ------------------------------------------------------------
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -162,7 +191,9 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 20,
 }
 
+# ------------------------------------------------------------
 # JWT Settings
+# ------------------------------------------------------------
 from datetime import timedelta
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
@@ -184,12 +215,15 @@ SIMPLE_JWT = {
     'JTI_CLAIM': 'jti',
 }
 
-# CORS Settings
-""" CORS_ALLOW_ALL_ORIGINS = config('CORS_ALLOW_ALL_ORIGINS', default=False, cast=bool)
-CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000,http://127.0.0.1:3000', cast=lambda v: [s.strip() for s in v.split(',')])
-CORS_ALLOW_CREDENTIALS = True """
+# ------------------------------------------------------------
+# Email
+# ------------------------------------------------------------
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='no-reply@terimedi.local')
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# Leaflet Configuration
+# ------------------------------------------------------------
+# Leaflet map pour géolocaliser les pharmacie
+# ------------------------------------------------------------
 LEAFLET_CONFIG = {
     'DEFAULT_CENTER': (5.3600, -4.0083),  # Coordonnées d'Abidjan
     'DEFAULT_ZOOM': 10,
@@ -197,16 +231,12 @@ LEAFLET_CONFIG = {
     'MAX_ZOOM': 18,
     'TILES': [
         ('OpenStreetMap', 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            'attribution': '© OpenStreetMap contributors'
+            'attribution': ''#'© OpenStreetMap contributors'
         }),
     ],
     'OVERLAYS': [],
-    'ATTRIBUTION_PREFIX': 'Powered by Leaflet',
+    'ATTRIBUTION_PREFIX': '' #'Powered by Leaflet',
 }
-
-# Email Configuration
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='no-reply@terimedi.local')
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # GDAL Configuration
 GDAL_LIBRARY_PATH = config('GDAL_LIBRARY_PATH', default='')
