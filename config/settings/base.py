@@ -86,7 +86,7 @@ CHANNEL_LAYERS = {
         "CONFIG": {"hosts": [REDIS_URL]},
     },
 }
-
+"""
 #Redis
 CACHES = {
     "default": {
@@ -96,7 +96,7 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     }
-}
+}"""
 
 # ------------------------------------------------------------
 # Middleware

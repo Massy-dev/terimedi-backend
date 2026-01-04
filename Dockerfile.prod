@@ -1,0 +1,28 @@
+# Dockerfile.prod
+FROM python:3.11-slim
+
+# Définir le répertoire de travail
+WORKDIR /app
+
+# Installer les dépendances système
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpq-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copier requirements
+COPY requirements.txt .
+
+# Installer les dépendances Python
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+# Copier tout le projet
+COPY . .
+
+# Collect static files
+RUN python manage.py collectstatic --noinput
+
+# Commande pour lancer Daphne en prod
+CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "config.asgi:application"]

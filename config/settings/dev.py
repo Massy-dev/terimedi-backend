@@ -24,6 +24,16 @@ CORS_ALLOW_ALL_ORIGINS = True
     
 ]
 """
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_URL, #"redis://redis:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 # Configuration Redis pour Docker
 REDIS_HOST = os.environ.get("REDIS_HOST", "redis")  # Nom du service Docker
 REDIS_PORT = os.environ.get("REDIS_PORT", "6379")
