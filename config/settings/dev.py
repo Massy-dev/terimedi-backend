@@ -1,6 +1,11 @@
 import os
 from .base import *
 
+FIREBASE_CREDENTIALS = os.path.join(BASE_DIR, "firebase_credentials.json")
+# Initialisation Firebase Admin SDK
+if not firebase_admin._apps:
+    cred = credentials.Certificate(FIREBASE_CREDENTIALS)
+    firebase_admin.initialize_app(cred)
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
@@ -33,6 +38,14 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     }
+}
+
+#Channel
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {"hosts": [REDIS_URL]},
+    },
 }
 # Configuration Redis pour Docker
 REDIS_HOST = os.environ.get("REDIS_HOST", "redis")  # Nom du service Docker

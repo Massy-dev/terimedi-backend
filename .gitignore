@@ -6,16 +6,19 @@ __pycache__/
 *.env
 *env/
 *venv/
-
+env.bak/
+venv.bak/
 # Django
 db.sqlite3
 *.log
 media/
 staticfiles/
 .env*
+firebase-service-account.json
 
 # VS Code
 .vscode/
+
 
 # MacOS
 .DS_Store
@@ -45,5 +48,6 @@ dist/
 #autre
 env.example
 firebase_credentials.json
+*-firebase-adminsdk-*.json
 start.sh
 wait_for_db.py

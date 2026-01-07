@@ -3,9 +3,10 @@ Configuration de base Django pour TeriMedi
 """
 import os
 from pathlib import Path
-from decouple import config
+from decouple import config, Csv
 import firebase_admin
 from firebase_admin import credentials, messaging
+import dj_database_url
 
 # ------------------------------------------------------------
 # Paths
@@ -19,11 +20,7 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-change-me-in-producti
 DEBUG = config('DEBUG', default=True, cast=bool)
 
 
-FIREBASE_CREDENTIALS = os.path.join(BASE_DIR, "firebase_credentials.json")
-# Initialisation Firebase Admin SDK
-if not firebase_admin._apps:
-    cred = credentials.Certificate(FIREBASE_CREDENTIALS)
-    firebase_admin.initialize_app(cred)
+
 
 # ------------------------------------------------------------
 # Notifications
@@ -41,6 +38,7 @@ NOTIFICATION_SETTINGS = {
 # Applications Django
 # ------------------------------------------------------------
 DJANGO_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,7 +49,7 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    'daphne',
+    
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
@@ -79,13 +77,7 @@ ASGI_APPLICATION = "config.asgi.application"
 
 REDIS_URL = config('REDIS_URL', default='redis://localhost:6379/1')
 
-#Channel
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {"hosts": [REDIS_URL]},
-    },
-}
+
 """
 #Redis
 CACHES = {
@@ -103,6 +95,7 @@ CACHES = {
 # ------------------------------------------------------------
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -132,6 +125,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+ASGI_APPLICATION = 'config.asgi.application'
 # ------------------------------------------------------------
 # Password validation
 # ------------------------------------------------------------

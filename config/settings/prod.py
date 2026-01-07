@@ -4,7 +4,7 @@ from .base import *
 DEBUG = False
 ALLOWED_HOSTS = config(
     'DJANGO_ALLOWED_HOSTS',
-    cast=lambda v: [s.strip() for s in v.split(',')]
+    default='localhost,127.0.0.1', cast=Csv()
 )
 
 #os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
@@ -21,6 +21,30 @@ CACHES = {
 
 # DB sécurisée
 DATABASES = {
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL'),
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
+}
+
+# Channel Layers - Railway Redis
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [config('REDIS_URL', default='redis://localhost:6379')],
+        },
+    },
+}
+
+# CORS Configuration
+CORS_ALLOWED_ORIGINS = config(
+    'CORS_ALLOWED_ORIGINS',
+    default='http://localhost:3000',
+    cast=Csv()
+)
+"""DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': os.environ.get("POSTGRES_DB"),
@@ -29,8 +53,13 @@ DATABASES = {
         'HOST': os.environ.get("POSTGRES_HOST"),
         'PORT': os.environ.get("POSTGRES_PORT"),
     }
-}
+}"""
 
+# En production, n'autorisez que les domaines spécifiques
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # ============================
 # SECURITY SETTINGS (PROD)
 # ============================
@@ -47,4 +76,48 @@ SECURE_HSTS_PRELOAD = True
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# Firebase Configuration
+
+
+FIREBASE_CREDENTIALS_PATH = os.path.join(BASE_DIR, 'firebase-service-account.json')
+
+if not firebase_admin._apps and os.path.exists(FIREBASE_CREDENTIALS_PATH):
+    cred = credentials.Certificate(FIREBASE_CREDENTIALS_PATH)
+    firebase_admin.initialize_app(cred)
+
+# Notification Settings
+NOTIFICATION_SETTINGS = {
+    'FCM_ENABLED': True,
+    'WEBSOCKET_ENABLED': True,
+    'NOTIFICATION_SOUND': 'default',
+    'NOTIFICATION_PRIORITY': 'high',
+}
+
+# Security Settings pour Production
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True 
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
+# Logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+}
