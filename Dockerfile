@@ -43,9 +43,9 @@ RUN chmod -R 777 media
 
 
 # Copier et installer les requirements
-COPY requirements ./requirements/
+COPY requirements/base.txt ./requirements/base.txt
 RUN pip install --upgrade pip 
-RUN pip install -r requirements/dev.txt
+RUN pip install -r requirements/base.txt
 RUN pip install channels channels_redis
 # Copier le code source
 COPY . .
