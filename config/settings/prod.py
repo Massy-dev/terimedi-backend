@@ -60,30 +60,28 @@ if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-# ============================
-# SECURITY SETTINGS (PROD)
-# ============================
 
-SECURE_SSL_REDIRECT = True
-
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
-SECURE_HSTS_SECONDS = 31536000  # 1 an
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # Firebase Configuration
 
 
-FIREBASE_CREDENTIALS_PATH = os.path.join(BASE_DIR, 'firebase-service-account.json')
-
-if not firebase_admin._apps and os.path.exists(FIREBASE_CREDENTIALS_PATH):
-    cred = credentials.Certificate(FIREBASE_CREDENTIALS_PATH)
-    firebase_admin.initialize_app(cred)
+FIREBASE_CREDENTIALS = os.path.join('FIREBASE_CREDENTIALS', default='none')
+FIREBASE_CREDENTIALS_PATH = os.path.join(BASE_DIR, "firebase_credentials.json")
+import json
+if not firebase_admin._apps:
+    if FIREBASE_CREDENTIALS:
+        # En production : utiliser la variable d'environnement
+        cred_dict = json.loads(FIREBASE_CREDENTIALS)
+        cred = credentials.Certificate(cred_dict)
+    elif os.path.exists(FIREBASE_CREDENTIALS_PATH):
+        # En local : utiliser le fichier
+        cred = credentials.Certificate(FIREBASE_CREDENTIALS_PATH)
+    else:
+        print("Warning: Firebase credentials not found")
+        cred = None
+    
+    if cred:
+        firebase_admin.initialize_app(cred)
 
 # Notification Settings
 NOTIFICATION_SETTINGS = {
@@ -93,7 +91,10 @@ NOTIFICATION_SETTINGS = {
     'NOTIFICATION_PRIORITY': 'high',
 }
 
-# Security Settings pour Production
+## ============================
+# SECURITY SETTINGS (PROD)
+# ============================
+
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
