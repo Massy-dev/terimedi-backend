@@ -16,11 +16,11 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copier les requirements
-COPY requirements/dev.txt ./requirements/dev.txt
+COPY requirements/ requirements/
 
 # Installer les dépendances Python
 RUN pip install --upgrade pip && \
-    pip install -r requirements/dev.txt
+    pip install -r requirements/base.txt
 
 # Copier le projet
 COPY . .

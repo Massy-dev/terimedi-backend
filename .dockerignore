@@ -7,6 +7,9 @@
 # Docker
 docker-compose-prod*.yml
 Dockerfile.prod*
+Dockerfile*
+Docker-compose*.yml
+Docker-compose.dev.yml
 .dockerignore
 
 # Python
