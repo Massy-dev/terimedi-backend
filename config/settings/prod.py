@@ -2,11 +2,15 @@ import os
 from .base import *
 
 DEBUG = False
-ALLOWED_HOSTS = config(
-    'DJANGO_ALLOWED_HOSTS',
-    default='localhost,127.0.0.1', cast=Csv()
-)
 
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+
+if not ALLOWED_HOSTS:
+    
+    RAILWAY_STATIC_URL = os.getenv('RAILWAY_STATIC_URL', '')
+    if RAILWAY_STATIC_URL:
+        ALLOWED_HOSTS = [RAILWAY_STATIC_URL.replace('https://', '').replace('http://', '')]
+    ALLOWED_HOSTS.append('*.railway.app')
 #os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 CACHES = {
@@ -102,7 +106,7 @@ if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    
+
     """SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
