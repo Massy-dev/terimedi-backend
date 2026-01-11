@@ -1,0 +1,57 @@
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+docker-compose-prod*.yml
+Dockerfile.prod*
+.dockerignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Django
+*.log
+db.sqlite3
+db.sqlite3-journal
+/media
+/staticfiles
+
+# Environment
+.env
+.env.*
+!.env.example
+*.env
+
+# Firebase credentials
+firebase_credentials.json
+*-firebase-adminsdk-*.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Documentation
+README.md
+docs/
+*.md
