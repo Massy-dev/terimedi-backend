@@ -41,4 +41,4 @@ CMD echo "=== Environment Check ===" && \
     echo "ALLOWED_HOSTS: $ALLOWED_HOSTS" && \
     echo "=== Starting Server ===" && \
     python manage.py migrate --noinput && \
-    daphne -b 0.0.0.0 -p ${PORT:-8000} config.asgi:application
+    sh -c "daphne 0.0.0.0 -p ${PORT} config.asgi:application"

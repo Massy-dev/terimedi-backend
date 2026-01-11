@@ -3,8 +3,7 @@ FROM python:3.11-slim
 # Variables d'environnement
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    PIP_NO_CACHE_DIR=1 \
-    PORT=8000
+    PIP_NO_CACHE_DIR=1 
 
 # Créer le répertoire de travail
 WORKDIR /app
@@ -12,7 +11,6 @@ WORKDIR /app
 # Installer les dépendances système
 RUN apt-get update && apt-get install -y \
     gcc \
-    postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
 # Copier les requirements
@@ -28,18 +26,16 @@ COPY . .
 # Créer les dossiers nécessaires
 RUN mkdir -p staticfiles media
 
-# Collecter les fichiers statiques
-RUN python manage.py collectstatic --noinput || true
 
-# Exposer le port (Railway utilise la variable $PORT)
-EXPOSE $PORT
+
+
 
 # Script de démarrage qui exécute les migrations puis lance Daphne
-CMD echo "=== Environment Check ===" && \
-    echo "PORT: $PORT" && \
-    echo "DATABASE_URL: ${DATABASE_URL:0:30}..." && \
-    echo "ALLOWED_HOSTS: $ALLOWED_HOSTS" && \
-    echo "=== Starting Server dockerfile.prod ===" && \
+CMD sh -c "\
+    echo '=== Environment Check ===' && \
+    echo "PORT: $PORT" && \ 
     python manage.py migrate --noinput && \
-    daphne -b 0.0.0.0 -p ${PORT:-8000} config.asgi:application
+    python manage.py collectstatic --noinput && \
+    daphne -b 0.0.0.0 -p ${PORT} config.asgi:application\
+    "
 
