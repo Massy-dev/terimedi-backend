@@ -1,53 +1,28 @@
 FROM python:3.11-slim
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-ENV GDAL_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgdal.so
+# Variables d'environnement
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PORT=8000
 
+# Créer le répertoire de travail
 WORKDIR /app
 
-# Mise à jour des sources de packages et installation des dépendances système
+# Installer les dépendances système
 RUN apt-get update && apt-get install -y \
-        libpq-dev \
-        postgresql-client \
-        gcc \
-        g++ \
-        make \
-        python3-dev \
-        cmake \
-        git \
-        libgeos-dev \
-        libproj-dev \
-        proj-bin \
-        proj-data \
-        libgdal-dev \
-        gdal-bin \
-        libspatialindex-dev \
-        libffi-dev \
-        libssl-dev \
-        libpq-dev \
+    gcc \
+    postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
+# Copier les requirements
+COPY requirements/dev.txt ./requirements/dev.txt
 
+# Installer les dépendances Python
+RUN pip install --upgrade pip && \
+    pip install -r requirements/dev.txt
 
-# Spécifier les variables d'environnement pour GDAL
-ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
-ENV C_INCLUDE_PATH=/usr/include/gdal
-ENV PROJ_LIB=/usr/share/proj
-
-RUN mkdir -p media/prescriptions/
-RUN mkdir -p media/pharmacies/logos/
-RUN chmod -R 777 media
-
-
-
-
-# Copier et installer les requirements
-COPY requirements/base.txt ./requirements/base.txt
-RUN pip install --upgrade pip 
-RUN pip install -r requirements/base.txt
-RUN pip install channels channels_redis
-# Copier le code source
+# Copier le projet
 COPY . .
 
 # Créer les dossiers nécessaires
@@ -56,23 +31,9 @@ RUN mkdir -p staticfiles media
 # Collecter les fichiers statiques
 RUN python manage.py collectstatic --noinput || true
 
+# Exposer le port (Railway utilise la variable $PORT)
+EXPOSE $PORT
 
-# Donner tous les droits d'écriture sur les migrations
-RUN find /app/apps -type d -name "migrations" -exec chmod -R 777 {} \; && chmod -R 777 /app
-
-# Créer un utilisateur non-root pour la sécurité
-RUN adduser --disabled-password --gecos '' appuser && chown -R appuser:appuser /app
-USER appuser
-
-# Exposition du port
-EXPOSE 8000
-
-
-
-# Script de démarrage
-#COPY --chmod=755 start.sh /start.sh
-#RUN chmod +x /start.sh
-
-# Commande par défaut
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-
+# Script de démarrage qui exécute les migrations puis lance Daphne
+CMD python manage.py migrate --noinput && \
+    daphne -b 0.0.0.0 -p $PORT config.asgi:application
