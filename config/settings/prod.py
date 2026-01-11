@@ -6,7 +6,7 @@ DEBUG = False
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 if not ALLOWED_HOSTS:
-    
+
     RAILWAY_STATIC_URL = os.getenv('RAILWAY_STATIC_URL', '')
     if RAILWAY_STATIC_URL:
         ALLOWED_HOSTS = [RAILWAY_STATIC_URL.replace('https://', '').replace('http://', '')]
@@ -106,7 +106,11 @@ if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+    CSRF_TRUSTED_ORIGINS = [
+        "https://stellar-strength-production.up.railway.app"
+    ]
     """SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
