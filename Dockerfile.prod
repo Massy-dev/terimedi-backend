@@ -28,14 +28,4 @@ RUN mkdir -p staticfiles media
 
 
 
-
-
-# Script de démarrage qui exécute les migrations puis lance Daphne
-CMD sh -c "\
-    echo '=== Environment Check ===' && \
-    echo "PORT: $PORT" && \ 
-    python manage.py migrate --noinput && \
-    python manage.py collectstatic --noinput && \
-    daphne -b 0.0.0.0 -p ${PORT} config.asgi:application\
-    "
-
+CMD ["python", "start.py"]

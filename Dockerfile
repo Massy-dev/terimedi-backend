@@ -35,10 +35,5 @@ RUN python manage.py collectstatic --noinput || true
 EXPOSE $PORT
 
 # Script de démarrage qui exécute les migrations puis lance Daphne
-CMD echo "=== Environment Check ===" && \
-    echo "PORT: $PORT" && \
-    echo "DATABASE_URL: ${DATABASE_URL:0:30}..." && \
-    echo "ALLOWED_HOSTS: $ALLOWED_HOSTS" && \
-    echo "=== Starting Server ===" && \
-    python manage.py migrate --noinput && \
-    sh -c "daphne 0.0.0.0 -p ${PORT} config.asgi:application"
+ENTRYPOINT ["sh", "-c"]
+CMD "python manage.py migrate --noinput && python manage.py collectstatic --noinput && daphne -b 0.0.0.0 -p ${PORT} config.asgi:application"
