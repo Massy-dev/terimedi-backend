@@ -26,7 +26,6 @@ COPY . .
 # Créer les dossiers nécessaires
 RUN mkdir -p staticfiles media
 
-RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
