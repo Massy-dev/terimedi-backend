@@ -125,7 +125,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 ROOT_URLCONF = 'config.urls'
-ASGI_APPLICATION = 'config.asgi.application'
+
 # ------------------------------------------------------------
 # Password validation
 # ------------------------------------------------------------
