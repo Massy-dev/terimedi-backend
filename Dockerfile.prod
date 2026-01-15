@@ -3,7 +3,8 @@ FROM python:3.11-slim
 # Variables d'environnement
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    PIP_NO_CACHE_DIR=1 
+    PIP_NO_CACHE_DIR=1 \
+    PORT=8000
 
 # Créer le répertoire de travail
 WORKDIR /app
@@ -27,8 +28,8 @@ COPY . .
 RUN mkdir -p staticfiles media
 RUN python manage.py collectstatic --noinput || true
 
-#EXPOSE 8000
+EXPOSE $PORT
 
-CMD daphne -b 0.0.0.0 -p  $PORT config.asgi:application
+#CMD daphne -b 0.0.0.0 -p  $PORT config.asgi:application
 
-#CMD ["python", "start.py"]
+CMD ["python", "start.py"]
