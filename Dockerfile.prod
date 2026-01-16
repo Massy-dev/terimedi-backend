@@ -30,6 +30,8 @@ RUN python manage.py collectstatic --noinput || true
 
 EXPOSE $PORT
 
+CMD ["/bin/sh", "-c", "daphne -b 0.0.0.0 -p ${PORT} config.asgi:application"]
+
 #CMD daphne -b 0.0.0.0 -p  $PORT config.asgi:application
 
-CMD ["python", "start.py"]
+#CMD ["python", "start.py"]
