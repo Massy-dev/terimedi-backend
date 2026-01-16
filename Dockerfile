@@ -32,4 +32,4 @@ RUN python manage.py collectstatic --noinput || true
 EXPOSE $PORT
 
 CMD python manage.py migrate --noinput && \
-    daphne -b 0.0.0.0 -p $PORT config.asgi:application
+    daphne -b 0.0.0.0 -p 8000 config.asgi:application
