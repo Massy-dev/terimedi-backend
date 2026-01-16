@@ -1,3 +1,11 @@
 #!/bin/sh
-echo "PORT is $PORT"
-exec daphne -b 0.0.0.0 -p "$PORT" config.asgi:application
+set -e
+
+echo "Running migrations..."
+python manage.py migrate --noinput
+
+echo "Collecting static files..."
+python manage.py collectstatic --noinput
+
+echo "Starting Daphne..."
+exec daphne -b 0.0.0.0 -p 8000 config.asgi:application
