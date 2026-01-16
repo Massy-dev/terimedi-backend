@@ -3,7 +3,8 @@ from .base import *
 
 GDAL_LIBRARY_PATH = os.getenv("GDAL_LIBRARY_PATH")
 GEOS_LIBRARY_PATH = os.getenv("GEOS_LIBRARY_PATH")
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=Csv())
+#ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=Csv())
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
 """if not ALLOWED_HOSTS:
 
