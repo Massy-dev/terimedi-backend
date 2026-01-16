@@ -13,7 +13,7 @@ db.sqlite3
 *.log
 media/
 staticfiles/
-.env*
+.env
 firebase-service-account.json
 
 # VS Code

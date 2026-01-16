@@ -1,60 +1,24 @@
-
-# Git
+cat > .dockerignore << 'EOF'
 .git
 .gitignore
-.gitattributes
-
-# Docker
-docker-compose-prod*.yml
-Dockerfile.prod*
-Dockerfile*
-Docker-compose*.yml
-Docker-compose.dev.yml
-.dockerignore
-
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
+__pycache__
+*.pyc
+*.pyo
+*.pyd
 .Python
-*.egg-info/
-dist/
-build/
-
-# Django
-*.log
-db.sqlite3
-db.sqlite3-journal
-/media
-/staticfiles
-
-# Environment
+env/
+venv/
 .env
-.env.*
-!.env.example
 *.env
-
-# Firebase credentials
+!.env.example
+db.sqlite3
+.DS_Store
+*.log
+.vscode
+.idea
+docker-compose.yml
+docker-compose.prod.yml
+README.md
 firebase_credentials.json
 *-firebase-adminsdk-*.json
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Testing
-.coverage
-htmlcov/
-.pytest_cache/
-
-# Documentation
-README.md
-docs/
-*.md
+EOF

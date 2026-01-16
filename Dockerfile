@@ -37,3 +37,13 @@ EXPOSE $PORT
 # Script de démarrage qui exécute les migrations puis lance Daphne
 ENTRYPOINT ["sh", "-c"]
 CMD "python manage.py migrate --noinput && python manage.py collectstatic --noinput && daphne -b 0.0.0.0 -p ${PORT} config.asgi:application"
+
+#COPY entrypoint.sh /entrypoint.sh
+#RUN chmod +x /entrypoint.sh
+#CMD ["/entrypoint.sh"]
+
+#CMD ["/bin/sh", "-c", "daphne -b 0.0.0.0 -p ${PORT} config.asgi:application"]
+
+#CMD daphne -b 0.0.0.0 -p  $PORT config.asgi:application
+
+#CMD ["python", "start.py"]
