@@ -11,9 +11,16 @@ WORKDIR /app
 
 # Installer les dépendances système
 RUN apt-get update && apt-get install -y \
+    gdal-bin \
+    libgdal-dev \
     gcc \
+    g++ \
     postgresql-client \
     && rm -rf /var/lib/apt/lists/*
+
+    # Variable d’environnement requise par GeoDjango
+ENV GDAL_LIBRARY_PATH=/usr/lib/libgdal.so
+ENV GEOS_LIBRARY_PATH=/usr/lib/libgeos_c.so
 
 # Copier les requirements
 COPY requirements.txt .
