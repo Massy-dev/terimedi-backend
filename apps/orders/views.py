@@ -286,7 +286,7 @@ class CommandeDetailAPIView(APIView):
 class AccepterDevisAPIView(APIView):
     """Client accepte le devis"""
     permission_classes = [IsAuthenticated]
-    print("mon statut ")
+    print("mon statut fichier orders.views ligne 289")
     def post(self, request, commande_id):
         """
         POST /api/commandes/{id}/accepter-devis/
