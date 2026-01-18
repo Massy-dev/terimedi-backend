@@ -3,9 +3,8 @@ from .base import *
 
 GDAL_LIBRARY_PATH = os.getenv("GDAL_LIBRARY_PATH")
 GEOS_LIBRARY_PATH = os.getenv("GEOS_LIBRARY_PATH")
-#ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=Csv())
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
-#ALLOWED_HOSTS="terimedi-backend-production.up.railway.app","localhost","127.0.0.1"
+
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
 
 """if not ALLOWED_HOSTS:
 
@@ -61,11 +60,7 @@ CACHES = {
 
 
 # CORS Configuration
-CORS_ALLOWED_ORIGINS = config(
-    'CORS_ALLOWED_ORIGINS',
-    default='localhost:3000',
-    cast=Csv()
-)
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', cast=lambda v: [s.strip() for s in v.split(',')])
 
 
 # En production, n'autorisez que les domaines spécifiques
@@ -100,9 +95,7 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-    CSRF_TRUSTED_ORIGINS = [
-        "terimedi-backend-production.up.railway.app",
-    ]
+    CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', cast=lambda v: [s.strip() for s in v.split(',')])
     
 
 # Logging
