@@ -19,11 +19,17 @@ if DATABASE_URL:
     }
     
     # Configuration SSL pour Supabase
-    DATABASES['default']['OPTIONS'] = {
-        'sslmode': 'require',
-    }
+    DATABASES['default'].update({
+        'ATOMIC_REQUESTS': True,
+        'CONN_MAX_AGE': 600,
+        'OPTIONS': {
+            'sslmode': 'require',
+            'connect_timeout': 10,
+            'options': '-c statement_timeout=30000',  # 30 secondes
+        },
+    })
     
-    print("✅ Using Supabase PostgreSQL")
+    print(f"✅ Using Supabase PostgreSQL (Host: {DATABASES['default']['HOST']})")
 else:
     # Local : SQLite
     DATABASES = {
