@@ -3,9 +3,7 @@ from .base import *
 
 FIREBASE_CREDENTIALS = os.path.join(BASE_DIR, "firebase_credentials.json")
 # Initialisation Firebase Admin SDK
-if not firebase_admin._apps:
-    cred = credentials.Certificate(FIREBASE_CREDENTIALS)
-    firebase_admin.initialize_app(cred)
+
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
 

@@ -82,22 +82,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 import json
 FIREBASE_CREDENTIALS = config('FIREBASE_CREDENTIALS', default=None)
 
-if not firebase_admin._apps:
-    if FIREBASE_CREDENTIALS:
-        # En production : utiliser la variable d'environnement
-        try:
-            cred_dict = json.loads(FIREBASE_CREDENTIALS)
-            cred = credentials.Certificate(cred_dict)
-            firebase_admin.initialize_app(cred)
-        except Exception as e:
-            print(f"Firebase init error: {e}")
-    else:
-        firebase_path  = os.path.join(BASE_DIR, "firebase_credentials.json")
-
-        if os.path.exists(firebase_path ):
-            cred = credentials.Certificate(firebase_path )
-            firebase_admin.initialize_app(cred)
-   
 
 # Notification Settings
 NOTIFICATION_SETTINGS = {

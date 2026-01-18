@@ -17,6 +17,11 @@ from rest_framework_simplejwt.views import (
 )
 from django.http import JsonResponse
 
+from config.firebase import init_firebase
+
+init_firebase()
+
+
 schema_view = get_schema_view(
    openapi.Info(
       title="TeriMedi API",
