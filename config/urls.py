@@ -15,6 +15,7 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 
 )
+from django.http import JsonResponse
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -29,7 +30,15 @@ schema_view = get_schema_view(
    permission_classes=(permissions.AllowAny,),
 )
 
+def health(request):
+    return JsonResponse({
+        "status": "ok",
+        "service": "terimedi-backend"
+    })
+
 urlpatterns = [
+
+    path("", health), 
     path('admin/', admin.site.urls),
 
     # Auth JWT
