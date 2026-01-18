@@ -80,9 +80,8 @@ CACHES = {
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
 CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', cast=lambda v: [s.strip() for s in v.split(',')])
-CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in config('CSRF_TRUSTED_ORIGINS', cast=Csv())]
 
-#CSRF_TRUSTED_ORIGINS="https://terimedi-backend-production.up.railway.app"
+CSRF_TRUSTED_ORIGINS="https://terimedi-backend-production.up.railway.app"
 #CORS_ALLOWED_ORIGINS="https://terimedi-backend-production.up.railway.app,https://*.railway.app,http://127.0.0.1:3000,http://localhost:3000"
 
 
