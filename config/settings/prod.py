@@ -6,13 +6,33 @@ GEOS_LIBRARY_PATH = os.getenv("GEOS_LIBRARY_PATH")
 
 
 # DB sécurisée
-DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL'),
-        conn_max_age=600,
-        
-    )
-}
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if DATABASE_URL:
+    # Production : Supabase PostgreSQL
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+            ssl_require=True,  # Supabase nécessite SSL
+        )
+    }
+    
+    # Configuration SSL pour Supabase
+    DATABASES['default']['OPTIONS'] = {
+        'sslmode': 'require',
+    }
+    
+    print("✅ Using Supabase PostgreSQL")
+else:
+    # Local : SQLite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+    print("⚠️ Using SQLite (local)")
 
 # Redis URL
 REDIS_URL = config('REDIS_URL', default='redis://localhost:6379')
@@ -39,7 +59,7 @@ else:
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": config("REDIS_URL"),
+        "LOCATION": REDIS_URL,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }

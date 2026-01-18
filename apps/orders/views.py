@@ -286,7 +286,7 @@ class CommandeDetailAPIView(APIView):
 class AccepterDevisAPIView(APIView):
     """Client accepte le devis"""
     permission_classes = [IsAuthenticated]
-    print("mon statut fichier orders.views ligne 28")
+    print("mon statut fichier orders.views ligne 289")
     print("CSRF_TRUSTED_ORIGINS:", settings.CSRF_TRUSTED_ORIGINS)
     def post(self, request, commande_id):
         """
