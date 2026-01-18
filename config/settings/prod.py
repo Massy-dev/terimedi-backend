@@ -63,7 +63,7 @@ CACHES = {
 # CORS Configuration
 CORS_ALLOWED_ORIGINS = config(
     'CORS_ALLOWED_ORIGINS',
-    default='http://localhost:3000',
+    default='localhost:3000',
     cast=Csv()
 )
 
@@ -101,7 +101,7 @@ if not DEBUG:
     CSRF_COOKIE_SECURE = True
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     CSRF_TRUSTED_ORIGINS = [
-        "https://terimedi-backend-production.up.railway.app/",
+        "terimedi-backend-production.up.railway.app",
     ]
     
 

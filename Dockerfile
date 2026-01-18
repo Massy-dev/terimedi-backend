@@ -11,35 +11,38 @@ WORKDIR /app
 
 # Installer les dépendances système
 RUN apt-get update && apt-get install -y \
-    binutils libproj-dev gdal-bin libgdal-dev \
-    libgeos-dev build-essential \
+    binutils \
+    libproj-dev \
+    gdal-bin \
+    libgdal-dev \
+    libgeos-dev \
+    build-essential \
     gcc \
     g++ \
     postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
-   
+
+# Variable d’environnement requise par GeoDjango
+ENV GDAL_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgdal.so
+ENV GEOS_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgeos_c.so
+
+
 # Copier les requirements
 COPY requirements.txt .
 
 # Installer les dépendances Python
-RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Copier le projet
 COPY . .
 
-# Variable d’environnement requise par GeoDjango
- ENV GDAL_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgdal.so
- ENV GEOS_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgeos_c.so
-
 
 # Créer les dossiers nécessaires
 RUN mkdir -p staticfiles media
-RUN python manage.py collectstatic --noinput || true
 
-EXPOSE $PORT
-
+# Entrypoint
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
 ENTRYPOINT ["/entrypoint.sh"]
