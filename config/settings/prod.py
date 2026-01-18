@@ -117,7 +117,7 @@ if not DEBUG:
     CSRF_COOKIE_SECURE = True
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     CSRF_TRUSTED_ORIGINS = [
-        "https://*.railway.app",
+        "https://terimedi-backend-production.up.railway.app/",
     ]
     
 

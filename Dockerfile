@@ -32,7 +32,7 @@ COPY . .
 # Variable d’environnement requise par GeoDjango
  ENV GDAL_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgdal.so
  ENV GEOS_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgeos_c.so
- RUN ls /usr/lib/x86_64-linux-gnu | grep gdal || true
+
 
 # Créer les dossiers nécessaires
 RUN mkdir -p staticfiles media
