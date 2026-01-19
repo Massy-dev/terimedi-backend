@@ -1,35 +1,28 @@
 import os
 from .base import *
-
+print("🔥 PROD SETTINGS LOADED 🔥")
 GDAL_LIBRARY_PATH = os.getenv("GDAL_LIBRARY_PATH")
 GEOS_LIBRARY_PATH = os.getenv("GEOS_LIBRARY_PATH")
 
 
 # DB sécurisée
 DATABASE_URL = os.environ.get('DATABASE_URL')
+
 print("databse_url---",DATABASE_URL)
-if DATABASE_URL:
-    # Production : Supabase PostgreSQL
-    DATABASES = {
-        "default": dj_database_url.parse(
-        os.environ.get("DATABASE_URL"),
+
+if not DATABASE_URL:
+    raise RuntimeError("DATABASE_URL is not set")
+
+DATABASES = {
+    "default": dj_database_url.parse(
+        DATABASE_URL,
         conn_max_age=600,
         ssl_require=True,
+        engine="django.contrib.gis.db.backends.postgis",
     )
-    }
-    
-    
-    
-    print(f"✅ Using PostgreSQL (Host: {DATABASES['default']['HOST']})")
-else:
-    # Local : SQLite
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-    print("⚠️ Using SQLite (local)")
+}
+
+print(f"✅ Using PostgreSQL (Host: {DATABASES['default']['HOST']})")
 
 # Redis URL
 REDIS_URL = config('REDIS_URL', default='redis://localhost:6379')
