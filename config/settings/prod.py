@@ -10,26 +10,12 @@ DATABASE_URL = os.environ.get('DATABASE_URL')
 if DATABASE_URL:
     # Production : Supabase PostgreSQL
     DATABASES = {
-        'default': dj_database_url.config(
-            default=DATABASE_URL,
-            conn_max_age=600,
-            conn_health_checks=True,
-            ssl_require=True,  # Supabase nécessite SSL
-        )
+        'default': dj_database_url.parse(DATABASE_URL)
     }
     
-    # Configuration SSL pour Supabase
-    DATABASES['default'].update({
-        'ATOMIC_REQUESTS': True,
-        'CONN_MAX_AGE': 600,
-        'OPTIONS': {
-            'sslmode': 'require',
-            'connect_timeout': 10,
-            'options': '-c statement_timeout=30000',  # 30 secondes
-        },
-    })
     
-    print(f"✅ Using Supabase PostgreSQL (Host: {DATABASES['default']['HOST']})")
+    
+    print(f"✅ Using PostgreSQL (Host: {DATABASES['default']['HOST']})")
 else:
     # Local : SQLite
     DATABASES = {
