@@ -42,7 +42,55 @@ COPY . .
 RUN mkdir -p staticfiles media
 
 # Entrypoint
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+#COPY entrypoint.sh /entrypoint.sh
+#RUN chmod +x /entrypoint.sh
 
-ENTRYPOINT ["/entrypoint.sh"]
+#ENTRYPOINT ["/entrypoint.sh"]
+
+RUN echo '#!/bin/bash\n\
+set -e\n\
+\n\
+echo "========================================"\n\
+echo "🚀 Starting TeriMedi Backend"\n\
+echo "========================================"\n\
+echo ""\n\
+\n\
+# Vérifier les variables d'\''environnement\n\
+echo "📋 Environment Variables:"\n\
+echo "  PORT: $PORT"\n\
+echo "  DEBUG: $DEBUG"\n\
+echo "  ALLOWED_HOSTS: $ALLOWED_HOSTS"\n\
+echo "  DATABASE_URL: ${DATABASE_URL:0:30}..."\n\
+if [ -n "$REDIS_URL" ]; then\n\
+  echo "  REDIS_URL: ${REDIS_URL:0:30}..."\n\
+else\n\
+  echo "  REDIS_URL: (not set - using InMemory)"\n\
+fi\n\
+echo ""\n\
+\n\
+# Exécuter les migrations avec logs détaillés\n\
+echo "========================================"\n\
+echo "📊 Running database migrations..."\n\
+echo "========================================"\n\
+python manage.py migrate --noinput --verbosity 2 || {\n\
+  echo "❌ Migration failed!"\n\
+  exit 1\n\
+}\n\
+echo ""\n\
+echo "✅ Migrations completed successfully"\n\
+echo ""\n\
+\n\
+# Afficher les tables créées\n\
+echo "📋 Database tables:"\n\
+python manage.py showmigrations --list | head -20\n\
+echo ""\n\
+\n\
+# Démarrer Daphne\n\
+echo "========================================"\n\
+echo "🌐 Starting Daphne server on port $PORT"\n\
+echo "========================================"\n\
+exec daphne -b 0.0.0.0 -p $PORT config.asgi:application\n\
+' > /app/start.sh && chmod +x /app/start.sh
+
+# Utiliser le script de démarrage
+CMD ["/start.sh"]
