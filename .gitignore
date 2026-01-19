@@ -4,6 +4,9 @@ __pycache__/
 *.pyo
 *.pyd
 *.env
+*docker-compose-prod.yml
+*docker-compose-dev.yml
+*docker-compose.yml
 *env/
 *venv/
 env.bak/
