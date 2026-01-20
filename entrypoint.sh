@@ -15,4 +15,4 @@ python manage.py collectstatic --noinput
 echo "🚀 Starting Daphne..."
 echo "PORT is $PORT"
 echo "Starting Daphne..."
-exec daphne -b 0.0.0.0 -p ${PORT:-8000} config.asgi:application
+exec daphne -b 0.0.0.0 -p ${PORT} config.asgi:application --verbosity 2
