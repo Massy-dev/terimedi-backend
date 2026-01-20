@@ -42,7 +42,7 @@ def health(request):
     })
 
 urlpatterns = [
-
+   
     path("", health), 
     path('admin/', admin.site.urls),
 
