@@ -61,6 +61,7 @@ CACHES = {
 
 
 # CORS Configuration
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
     "authorization",
     "content-type",
@@ -83,6 +84,7 @@ CORS_ALLOW_METHODS = [
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
 CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', cast=lambda v: [s.strip() for s in v.split(',')])
 CSRF_TRUSTED_ORIGINS=[
+    "https://terimedi-frontend.vercel.app",
     "https://terimedi-backend-production.up.railway.app",
     ]
 #CSRF_TRUSTED_ORIGINS="https://terimedi-backend-production.up.railway.app"
