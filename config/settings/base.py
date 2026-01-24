@@ -66,7 +66,7 @@ LOCAL_APPS = [
     'apps.notifications'
 ]
 
-INSTALLED_APPS = THIRD_PARTY_APPS + DJANGO_APPS + LOCAL_APPS
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS +  LOCAL_APPS
 
 ASGI_APPLICATION = "config.asgi.application"
 
@@ -96,7 +96,7 @@ CACHES = {
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    
+
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

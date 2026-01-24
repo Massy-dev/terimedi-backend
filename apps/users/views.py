@@ -14,6 +14,9 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
 User = get_user_model()
 
 
@@ -88,6 +91,7 @@ class FirebaseAuthView(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=401)
 
+@method_decorator(csrf_exempt, name='dispatch')
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = [AllowAny]
