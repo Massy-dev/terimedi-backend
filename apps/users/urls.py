@@ -3,7 +3,7 @@ from .views import *
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 urlpatterns = [
-    path('ping/', ping),
+    
     path('me/', user_profile, name='user-profile'),
     path("auth/", FirebaseAuthView.as_view(), name="firebase_auth"),
     path('register/', RegisterView.as_view(), name='register'),

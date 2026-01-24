@@ -16,10 +16,6 @@ from rest_framework.response import Response
 
 User = get_user_model()
 
-from django.http import HttpResponse
-
-def ping(request):
-    return HttpResponse("OK")
 
 @api_view(["POST"])
 def register_device_token(request):
