@@ -13,7 +13,16 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     gcc \
     postgresql-client \
+    binutils \
+    libproj-dev \
+    gdal-bin \
+    libgdal-dev \
+    libgeos-dev \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
+
+ENV GDAL_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgdal.so
+ENV GEOS_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgeos_c.so
 
 # Copier les requirements
 COPY requirements.txt .

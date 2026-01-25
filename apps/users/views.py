@@ -35,6 +35,7 @@ def register_device_token(request):
 
 # Create your views here.
 
+@method_decorator(csrf_exempt, name='dispatch')
 class PhoneLoginOrRegisterView(APIView):
     permission_classes = [AllowAny]
    
@@ -94,8 +95,9 @@ class FirebaseAuthView(APIView):
 @method_decorator(csrf_exempt, name='dispatch')
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
-    permission_classes = [AllowAny]
     serializer_class = RegisterSerializer
+    permission_classes = [AllowAny]
+    
     
     def perform_create(self, serializer):
         
