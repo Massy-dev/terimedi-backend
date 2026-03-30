@@ -8,7 +8,7 @@ GEOS_LIBRARY_PATH = os.getenv("GEOS_LIBRARY_PATH")
 # DB sécurisée
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
-print("databse_url---",DATABASE_URL)
+
 
 if not DATABASE_URL:
     raise RuntimeError("DATABASE_URL is not set")

@@ -16,3 +16,5 @@ def send_ws_notification(user_id: str, message: str, extra=None):
             }
         }
     )
+
+    print("channel layer----- ",channel_layer)

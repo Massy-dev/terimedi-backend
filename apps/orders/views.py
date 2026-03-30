@@ -127,6 +127,7 @@ class CommandeAPIView(APIView):
 
                 )
                 print('dans la view----',commande)
+                
                 send_ws_notification(
                     user_id=str(commande.order_number),
                     message=f"Nouvelle commande : ",
