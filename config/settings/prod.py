@@ -1,24 +1,17 @@
 import os
 from .base import *
+import glob
 
-import subprocess
 
-# Détecte automatiquement le chemin de libgdal dans le conteneur
-def get_gdal_path():
-    try:
-        result = subprocess.run(
-            ['find', '/usr', '-name', 'libgdal.so*', '-type', 'f'],
-            capture_output=True, text=True
-        )
-        paths = result.stdout.strip().split('\n')
-        return paths[0] if paths else None
-    except Exception:
-        return None
+def find_library(pattern):
+    """Trouve automatiquement le chemin d'une lib système."""
+    matches = glob.glob(pattern)
+    # Préfère libgdal.so, sinon prend libgdal.so.XX
+    exact = [m for m in matches if not m.split('.so')[-1].startswith('.')]
+    return (exact or matches or [None])[0]
 
-GDAL_LIBRARY_PATH = get_gdal_path()
-GEOS_LIBRARY_PATH = '/usr/lib/x86_64-linux-gnu/libgeos_c.so'
-print("GDAL_LIBRARY_PATH:", GDAL_LIBRARY_PATH)
-print("GEOS_LIBRARY_PATH:", GEOS_LIBRARY_PATH)
+GDAL_LIBRARY_PATH = find_library('/usr/lib/x86_64-linux-gnu/libgdal.so*')
+GEOS_LIBRARY_PATH = find_library('/usr/lib/x86_64-linux-gnu/libgeos_c.so*')
 
 # DB sécurisée
 DATABASE_URL = os.environ.get('DATABASE_URL')
