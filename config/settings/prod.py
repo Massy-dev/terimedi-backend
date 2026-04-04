@@ -10,8 +10,10 @@ def find_library(pattern):
     exact = [m for m in matches if not m.split('.so')[-1].startswith('.')]
     return (exact or matches or [None])[0]
 
-GDAL_LIBRARY_PATH = find_library('/usr/lib/x86_64-linux-gnu/libgdal.so*')
-GEOS_LIBRARY_PATH = find_library('/usr/lib/x86_64-linux-gnu/libgeos_c.so*')
+GDAL_LIBRARY_PATH = '/usr/lib/x86_64-linux-gnu/libgdal.so'
+GEOS_LIBRARY_PATH = '/usr/lib/x86_64-linux-gnu/libgeos_c.so'
+print("GDAL_LIBRARY_PATH:", GDAL_LIBRARY_PATH)
+print("GEOS_LIBRARY_PATH:", GEOS_LIBRARY_PATH)
 
 # DB sécurisée
 DATABASE_URL = os.environ.get('DATABASE_URL')
