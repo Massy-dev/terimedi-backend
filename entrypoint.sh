@@ -18,14 +18,16 @@ import os
 
 User = get_user_model()
 
-phone = os.getenv("DJANGO_SUPERUSER_PHONE", "0700000000")
+phone = os.getenv("DJANGO_SUPERUSER_PHONE", "0708000000")
 password = os.getenv("DJANGO_SUPERUSER_PASSWORD", "1833production")
 
 if not User.objects.filter(phone=phone).exists():
     User.objects.create_superuser(phone=phone, password=password)
     print("✅ Superuser created")
-else:
+elif User.objects.filter(phone=phone).exists():
     print("ℹ️ Superuser already exists")
+else:
+    print("❌ Superuser creation failed")
 END
 fi
 
