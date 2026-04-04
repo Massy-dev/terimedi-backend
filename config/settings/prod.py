@@ -1,7 +1,7 @@
 import os
 from .base import *
 import glob
-
+print("🔥 PROD SETTINGS LOADED 🔥")
 
 def find_library(pattern):
     """Trouve automatiquement le chemin d'une lib système."""
