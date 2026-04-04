@@ -9,27 +9,53 @@ FIREBASE_CREDENTIALS = os.path.join(BASE_DIR, "firebase_credentials.json")
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
+print("POSTGRES_HOST:", os.environ.get("POSTGRES_HOST"))
+print("POSTGRES_PORT:", os.environ.get("POSTGRES_PORT"))
+print("POSTGRES_DB:", os.environ.get("POSTGRES_DB"))
+print("POSTGRES_USER:", os.environ.get("POSTGRES_USER"))
+print("POSTGRES_PASSWORD:", os.environ.get("POSTGRES_PASSWORD"))
+
 # Base de données via Docker
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': os.environ.get("POSTGRES_DB", "terimedi"),
-        'USER': os.environ.get("POSTGRES_USER", "terimedi"),
-        'PASSWORD': os.environ.get("POSTGRES_PASSWORD", "teri_pass"),
-        'HOST': os.environ.get("POSTGRES_HOST", "db"),  # Nom du service Docker
-        'PORT': os.environ.get("POSTGRES_PORT", "5432"),
+        'NAME': os.environ.get("POSTGRES_DB"),
+        'USER': os.environ.get("POSTGRES_USER"),
+        'PASSWORD': os.environ.get("POSTGRES_PASSWORD"),
+        'HOST': os.environ.get("POSTGRES_HOST"),  # Nom du service Docker
+        'PORT': os.environ.get("POSTGRES_PORT"),
     }
 }
 
+print("DATABASES:", DATABASES)
+
 # Configuration CORS pour le développement
 CORS_ALLOW_ALL_ORIGINS = True
-"""CORS_ALLOWED_ORIGINS = [
+CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
 ]
-"""
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    "authorization",
+    "content-type",
+    "accept",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
 
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
