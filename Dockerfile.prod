@@ -23,13 +23,11 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 
-RUN ln -sf $(find /usr/lib -name "libgdal.so*" | head -1) /usr/lib/x86_64-linux-gnu/libgdal.so \
-    && ln -sf $(find /usr/lib -name "libgeos_c.so*" | head -1) /usr/lib/x86_64-linux-gnu/libgeos_c.so
-
-RUN find /usr -name "libgdal*" && find /usr -name "libgeos_c*" && echo "GDAL_LIBRARY_PATH: $(find /usr -name 'libgdal*')" && echo "GEOS_LIBRARY_PATH: $(find /usr -name 'libgeos_c*')" && echo "GDAL_LIBRARY_PATH: $GDAL_LIBRARY_PATH" && echo "GEOS_LIBRARY_PATH: $GEOS_LIBRARY_PATH"
 # Variable d’environnement requise par GeoDjango
+ENV GDAL_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgdal.so
+ENV GEOS_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/libgeos_c.so
 
-
+RUN echo "GDAL_LIBRARY_PATH: $GDAL_LIBRARY_PATH" && echo "GEOS_LIBRARY_PATH: $GEOS_LIBRARY_PATH"
 
 # Copier les requirements
 COPY requirements.txt .
