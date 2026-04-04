@@ -18,7 +18,7 @@ import os
 
 User = get_user_model()
 
-phone = os.getenv("DJANGO_SUPERUSER_PHONE", "0779346330")
+phone = os.getenv("DJANGO_SUPERUSER_PHONE", "0700000000")
 password = os.getenv("DJANGO_SUPERUSER_PASSWORD", "1833production")
 
 if not User.objects.filter(phone=phone).exists():
