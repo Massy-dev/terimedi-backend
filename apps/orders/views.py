@@ -133,7 +133,7 @@ class CommandeAPIView(APIView):
                     message=f"Nouvelle commande : ",
                     extra={"order_id": commande}
                 )
-        try:
+        
             
                 # Ajouter les médicaments
                  
@@ -153,6 +153,7 @@ class CommandeAPIView(APIView):
                     )
                  
                 commande.update_total()
+        try:
                 print("orderr ", commande.order_number)
                
             
@@ -287,8 +288,6 @@ class CommandeDetailAPIView(APIView):
 class AccepterDevisAPIView(APIView):
     """Client accepte le devis"""
     permission_classes = [IsAuthenticated]
-    print("mon statut fichier orders.views ligne 289")
-    print("CSRF_TRUSTED_ORIGINS:", settings.CSRF_TRUSTED_ORIGINS)
     def post(self, request, commande_id):
         """
         POST /api/commandes/{id}/accepter-devis/
