@@ -1,11 +1,27 @@
 import os
 from .base import *
+import ctypes
+
+try:
+    ctypes.CDLL(GDAL_LIBRARY_PATH)
+    print("✅ GDAL loaded successfully")
+except Exception as e:
+    print("❌ GDAL load error:", e)
 
 print("🔥 PROD SETTINGS LOADED 🔥")
 
-GDAL_LIBRARY_PATH = os.getenv("GDAL_LIBRARY_PATH")
-GEOS_LIBRARY_PATH = os.getenv("GEOS_LIBRARY_PATH")
+GDAL_LIBRARY_PATH = os.environ.get(
+    "GDAL_LIBRARY_PATH",
+    "/usr/lib/x86_64-linux-gnu/libgdal.so"
+)
 
+GEOS_LIBRARY_PATH = os.environ.get(
+    "GEOS_LIBRARY_PATH",
+    "/usr/lib/x86_64-linux-gnu/libgeos_c.so"
+)
+
+print("GDAL_LIBRARY_PATH:", GDAL_LIBRARY_PATH)
+print("GEOS_LIBRARY_PATH:", GEOS_LIBRARY_PATH)
 
 # DB sécurisée
 DATABASE_URL = os.environ.get('DATABASE_URL')
