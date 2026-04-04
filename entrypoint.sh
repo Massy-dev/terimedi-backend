@@ -3,6 +3,10 @@ set -e
 
 echo "🔥 PROD SETTINGS LOADED 🔥"
 
+python manage.py migrate
+
+
+
 # Vérifier et créer les dossiers de migrations seulement si nécessaire
 for app in users pharmacies orders notifications; do
   MIGRATION_DIR="./apps/$app/migrations"
@@ -24,8 +28,20 @@ python manage.py makemigrations --check --dry-run || python manage.py makemigrat
 
 # Appliquer toutes les migrations
 echo "📦 Running migrations..."
+
 python manage.py migrate --noinput
 
+# Créer le superuser automatiquement si il n'existe pas
+python manage.py shell -c "
+from django.contrib.auth import get_user_model
+User = get_user_model()
+if not User.objects.filter(phone='0700000000').exists():
+    User.objects.create_superuser(
+    phone='0700000000', password='1833terimedi')
+    print('Superuser created successfully.')
+else:
+    print('Superuser already exists.')
+"
 # Collecter les fichiers statiques
 echo "📂 Collecting static files..."
 python manage.py collectstatic --noinput
