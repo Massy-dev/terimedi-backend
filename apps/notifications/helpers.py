@@ -177,7 +177,7 @@ def get_pharmacy_staff():
         return pharmacy_group.user_set.filter(is_active=True)
     except Group.DoesNotExist:
         # Fallback: tous les staff
-        return User.objects.filter(is_staff=True, is_active=True)
+        return User.objects.filter(is_active=True).exclude(role='client')
 
 
 # Fonction utilitaire pour notifier selon le statut
