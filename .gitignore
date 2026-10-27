@@ -1,0 +1,44 @@
+﻿# Environment variables and secrets
+.env
+.env.*
+!.env.example
+secrets/
+**/service-account*.json
+**/credentials*.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+.venv/
+venv/
+
+# Django
+*.log
+db.sqlite3
+media/
+staticfiles/
+
+# Tests and tooling
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Celery Beat
+celerybeat-schedule
+celerybeat-schedule.*
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# User-uploaded documents and images
+/medication_requests/
+/pharmacies/verification/
+/prescriptions/
+/media/
+
